@@ -7,17 +7,25 @@ void List::print_menu() {
     cout << " 1 - Print list.\n";
     cout << " 2 - Add to list.\n";
     cout << " 3 - Delete from list.\n";
-    cout << " 4 - Save List.\n";
-    cout << " 5 - Quit.\n";
+    cout << " 4 - Delete the user and the list.\n";
+    cout << " 5 - Change user.\n";
+    cout << " 6 - Save List.\n";
+    cout << " 7 - Quit.\n";
     cout << " Enter your choice and press return: ";
 
     cin >> choice;
  
-    if( choice == 5 ){
+    if( choice == 7 ){
         return;
     }
-    else if ( choice == 4 ) {
+    else if ( choice == 6 ) {
         save_list();
+    }
+    else if ( choice == 5 ) {
+        change_user();
+    }
+    else if ( choice == 4 ) {
+        delete_user();
     }
     else if ( choice == 2 ) {
         add_item();
@@ -118,4 +126,50 @@ void List::save_list() {
     cout << "Saving the list...\n";
     mainList[currentUserIndex] = list;
     print_menu();
+}
+
+void List::delete_user() {
+    vector<vector<string>> newMainList;
+
+    cout << "Removing the user with the list...\n";
+    for ( int user_index=0; user_index < (int)mainList.size(); user_index++) {
+        if ( user_index == currentUserIndex ) {
+            cout << "Removing user " << mainList[user_index][0] << " and all related items...\n";
+            for ( int index = 0; index < (int)mainList.size() - 1; index++) {
+                if ( index < user_index )
+                    newMainList.push_back(mainList[index]);
+                else
+                    newMainList.push_back(mainList[index+1]);
+            }
+            break;
+        }
+    }
+
+    mainList = newMainList;
+    cout << "New current user: " << mainList[0][0] << "\n";
+    name = mainList[0][0];
+    list = mainList[0];
+    currentUserIndex = 0;
+    
+    print_menu();
+}
+
+void List::change_user() {
+    int reply;
+    cout << "Here are the users: \n";
+    for ( int idx = 0; idx < (int)mainList.size(); idx++ ) {
+        if ( idx != currentUserIndex )
+            cout << idx << ": " << mainList[idx][0] << "\n";
+    }
+    cout << "Change to user by selecting the number: ";
+    cin >> reply;
+    if ( reply > -1 && reply < (int)mainList.size() ) {
+        cout << "\nChanging to user " << mainList[reply][0] << "\n";
+        currentUserIndex = reply;
+        name = mainList[currentUserIndex][0];
+        list = mainList[currentUserIndex];
+    }
+
+    print_menu();
+
 }

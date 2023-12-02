@@ -21,6 +21,8 @@ class List {
     void print_list();
     void add_item();
     void delete_item();
+    void delete_user();
+    void change_user();
     bool find_userList();
     void save_list();
 };
